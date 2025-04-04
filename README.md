@@ -2,6 +2,8 @@
 
 This repository implements a Lean Blueprint to formally verify the cryptographic protocol **WHIR: Reed–Solomon Proximity Testing with Super-Fast Verification**. WHIR is a new IOP of proximity that offers small query complexity and exceptionally fast verification time. In practice, the WHIR verifier typically runs in a few hundred microseconds, whereas other verifiers in the literature require several milliseconds (if not much more). This represents a significant improvement in verifier time for hash-based SNARGs (and beyond). For more details, please refer to the [WHIR paper](https://eprint.iacr.org/2024/1586).
 
+If all GitHub Actions succeed, the generated blueprint can be found [here](https://leastauthority.github.io/WHIR/).
+
 This project utilizes the [Lean Blueprint](https://github.com/PatrickMassot/leanblueprint) tool to structure and organize proofs in Lean using LaTeX.
 
 ---
@@ -75,4 +77,3 @@ Below is an example illustrating the usage of these macros. This example assumes
   \]
   None of the primes \(p_i\) divides \(N\) (as each leaves a remainder of 1), which leads to a contradiction. Thus, there must be infinitely many primes.
 \end{proof}
-
