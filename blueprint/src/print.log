@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999994 (TeX Live 2022/Debian) (preloaded format=xelatex 2025.4.3)  29 APR 2025 12:34
+This is XeTeX, Version 3.141592653-2.6-0.999994 (TeX Live 2022/Debian) (preloaded format=xelatex 2025.4.3)  29 APR 2025 13:03
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -398,9 +398,12 @@ File: color.cfg 2016/01/02 v1.6 sample color configuration
 Package color Info: Driver file: xetex.def on input line 149.
  (/usr/share/texlive/texmf-dist/tex/latex/graphics/mathcolor.ltx))
 Package hyperref Info: Link coloring ON on input line 30.
- (./print.out) (./print.out)
 \@outlinefile=\write3
 \openout3 = `print.out'.
+
+
+
+Package hyperref Warning: Rerun to get /PageLabels entry.
 
 LaTeX Font Info:    Overwriting math alphabet `\mathrm' in version `normal'
 (Font)                  OT1/cmr/m/n --> TU/lmr/m/n on input line 30.
@@ -589,7 +592,7 @@ LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
 (Font)              scaled to size 5.99936pt on input line 32.
 LaTeX Font Info:    Trying to load font information for U+msa on input line 32.
- (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
 LaTeX Font Info:    Trying to load font information for U+msb on input line 32.
@@ -597,30 +600,66 @@ LaTeX Font Info:    Trying to load font information for U+msb on input line 32.
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) [1
 
-] (./chapter/main.tex (./chapter/multilinear.tex
+] (./chapter/main.tex
+./chapter/main.tex:5: Missing $ inserted.
+<inserted text> 
+                $
+l.5 input{chapter/error_
+                        correcting_code}
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
-(Font)              scaled to size 10.00107pt on input line 6.
+(Font)              scaled to size 10.00107pt on input line 5.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
-(Font)              scaled to size 7.00075pt on input line 6.
+(Font)              scaled to size 7.00075pt on input line 5.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
-(Font)              scaled to size 5.00053pt on input line 6.
+(Font)              scaled to size 5.00053pt on input line 5.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
-(Font)              scaled to size 9.99893pt on input line 6.
+(Font)              scaled to size 9.99893pt on input line 5.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
-(Font)              scaled to size 6.99925pt on input line 6.
+(Font)              scaled to size 6.99925pt on input line 5.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
-(Font)              scaled to size 4.99947pt on input line 6.
+(Font)              scaled to size 4.99947pt on input line 5.
+./chapter/main.tex:5: Extra }, or forgotten $.
+l.5 input{chapter/error_correcting_code}
+                                        
+I've deleted a group-closing symbol because it seems to be
+spurious, as in `$x}$'. But perhaps the } is legitimate and
+you forgot something else, as in `\hbox{$x}'. In such cases
+the way to recover is to insert both the forgotten and the
+deleted material, e.g., by typing `I$}'.
+
+(./chapter/multilinear.tex
+./chapter/multilinear.tex:4: Missing $ inserted.
+<inserted text> 
+                $
+l.4 
+    
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
 )) [1] (./print.aux)
-Package rerunfilecheck Info: File `print.out' has not changed.
-(rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
- ) 
+
+Package rerunfilecheck Warning: File `print.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `print.out':
+(rerunfilecheck)             Before: <no file>
+(rerunfilecheck)             After:  D41D8CD98F00B204E9800998ECF8427E;0.
+ )
+(\end occurred inside a group at level 1)
+
+### simple group (level 1) entered at line 5 ({)
+### bottom level 
 Here is how much of TeX's memory you used:
- 16591 strings out of 476775
- 308823 string characters out of 5808213
+ 16587 strings out of 476775
+ 308783 string characters out of 5808213
  1845991 words of memory out of 5000000
  36536 multiletter control sequences out of 15000+600000
  517634 words of font info for 78 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
- 86i,6n,115p,402b,365s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 86i,6n,115p,402b,368s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
 Output written on print.pdf (2 pages).
