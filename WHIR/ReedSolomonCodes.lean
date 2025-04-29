@@ -5,6 +5,7 @@ Authors: Least Authority
 -/
 
 import WHIR.FracHammingDist
+import WHIR.ErrCorrCodes
 
 import Mathlib.FieldTheory.Finite.Basic
 import Mathlib.FieldTheory.Finite.GaloisField
@@ -70,19 +71,15 @@ noncomputable def rate (_C : ReedSolomonCode F L d) : ℝ := d / L.card
 /-- L≠∅ → |C.code| ≥ 2 since |𝔽| ≥ 2 -/
 lemma nonempty (C : ReedSolomonCode F L d) : C.code.Nonempty := sorry
 
-/-- C.list(f,δ) is the set of codewords close to a given function `f` within fractional Hamming distance `δ` -/
-noncomputable def list (C : ReedSolomonCode F L d) (f : L → F) (δ : ℝ) : Finset (L → F) :=
-  C.code.filter (λ c ↦ fractionalHammingDist f c ≤ δ)
-
-/-- The Reed-Solomon code `C` is `(δ, l)`-list decodable if every function `f` has fewer than `l` close codewords within fractional Hamming distance `δ` -/
-def listDecodable (C : ReedSolomonCode F L d) (δ : ℝ) (l : ℝ) : Prop :=
-  ∀ f : L → F, (C.list f δ).card < l
-
 /-- Complement of the evaluation set `L` in `F` i.e. `F\L` as a Finset -/
 def domainComplement (_C : ReedSolomonCode F L d) : Finset F :=
   Finset.univ \ L
 
 /-- L ≠ F → F\L ≠ ∅ -/
 lemma domain_complement_nonempty (C : ReedSolomonCode F L d) : Nonempty C.domainComplement := by sorry
+
+/-- Coarce a Reed–Solomon code into a `LinearCode` -/
+def toLinearCode (C : ReedSolomonCode F L d) : LinearCode F ↑L :=
+  { words := C.code}
 
 end ReedSolomonCode
