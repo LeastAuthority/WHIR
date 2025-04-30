@@ -22,7 +22,7 @@ structure Generator
     err    : {δ : ℝ // 0 < δ ∧ δ < 1 - BStar} → ENNReal
 
 
-namespace Gen
+namespace Generator
 
 variable {F : Type*} [Field F] [Fintype F] [DecidableEq F]
          {ι : Type*} [Fintype ι] [DecidableEq ι]
@@ -49,32 +49,7 @@ def isProximityGenerator
           (S.card ≥ (1 - (δ : ℝ)) * (Fintype.card ι)) ∧
           ∀ i : Fin l, ∃ u ∈ C.words, ∀ x ∈ S, f i x = u x
 
-end Gen
-
-
--- EXAMPLE USAGE:
-
-/-- The generic *monomial sampler*
-    `x ↦ (1, x, x², … , x^(l-1))` realised as a function
-    `Fin l → F`. -/
-def monomialSmpl
-    {F : Type*} [Field F] (l : ℕ) (x : F) : Fin l → F :=
-  fun i => x ^ (i : ℕ)        -- `i` coerces to a natural number
-
-variable {F : Type*} [Field F] [Fintype F] [DecidableEq F]
-variable {ι : Type*} [Fintype ι]
-
-/-- **Proximity generator with monomial sampling**
-    * `l` is kept abstract;
-    * `Smpl` is `monomialSmpl l`;
-    * `BStar = 0.1`;
-    * `err δ = δ²`. -/
-noncomputable def ProximityGen.monomial
-    (C : LinearCode F ι) (l : ℕ) : Generator C l where
-  Smpl  := monomialSmpl l
-  BStar := (1 : ℝ) / 10        -- 0.1
-  err   := fun δ => ((δ.1) ^ 2).toNNReal  -- square the underlying real number
-
+end Generator
 
 /-
 \begin{definition}[Proximity generator]\label{def:proximity-generator}
