@@ -39,6 +39,8 @@ def listDecodable (C : ErrCorrCode A ι) (δ : ℝ ) (ℓ : ℝ) : Prop :=
 def withinUniqueDecoding (C : ErrCorrCode A ι) (δ : ℝ) : Prop :=
   C.listDecodable δ 1
 
+/-- L≠∅ → |C.code| ≥ 2 since |𝔽| ≥ 2 -/
+lemma nonempty (C : ErrCorrCode A ι) : C.words.Nonempty := sorry
 
 -- TODO: Discuss with the author if this is what it's suppoed to be
 /-- The `m`‑interleaved code `Cᵐ`.  A word of `Cᵐ` is obtained by stacking `m` codewords

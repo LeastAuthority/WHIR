@@ -12,14 +12,14 @@ import Mathlib.Data.Real.Basic
 import Mathlib.Probability.ProbabilityMassFunction.Basic
 import Mathlib.Probability.Distributions.Uniform
 
-structure Gen
+structure Generator
   {F : Type*} [Field F] [Fintype F] [DecidableEq F]
   {ι : Type*} [Fintype ι]
   (C : LinearCode F ι)
   (l : ℕ) where
     Smpl   : F → (Fin l → F)
     BStar  : ℝ
-    err    : {δ : ℝ // 0 < δ ∧ δ < 1 - BStar} → ℝ
+    err    : {δ : ℝ // 0 < δ ∧ δ < 1 - BStar} → ENNReal
 
 
 namespace Gen
@@ -32,15 +32,27 @@ variable {F : Type*} [Field F] [Fintype F] [DecidableEq F]
 def linComb {ℓ : ℕ} (r : Fin ℓ → F) (f : Fin ℓ → ι → F) : ι → F :=
   fun x => ∑ i, r i * f i x
 
-/- WORK IN PROGRESS-/
+/- A generator `G`is a `proximity generator` if for every list of functions
+   `f₁,…,f_ℓ : ι → F` and every admissible radius `δ` the following holds true:
+
+   if a linear combination `\sum rᵢ·fᵢ` with random coefficients `rᵢ` drawn according
+   to `G.Smpl` lands within fractional Hamming distance `δ` of the code `C`
+   more frequently than the error bound `G.err δ`, then each function `fᵢ` coincides with
+   some codeword on at least a `(1 - δ)` fraction of the evaluaton points. -/
 def isProximityGenerator
     {ℓ : ℕ}
     {C : LinearCode F ι}
-    (G : Gen C ℓ) : Prop :=
+    (G : Generator C ℓ) : Prop :=
       ∀ (f : Fin ℓ → ι → F) (δ : {δ : ℝ // 0 < δ ∧ δ < 1 - G.BStar}),
       ((PMF.uniformOfFintype F).toOuterMeasure
-        { r | r = r} ) >
-        G.err δ → True
+        { r | fractionalHammingDistSet
+          (linComb (G.Smpl r) f)
+          C.words
+          C.toErrCorrCode.nonempty ≤ δ.val} ) >
+        G.err δ →
+      ∃ S : Finset ι,
+        (S.card ≥ (1 - (δ : ℝ)) * (Fintype.card ι)) ∧
+        ∀ i : Fin ℓ, ∃ u ∈ C.words, ∀ x ∈ S, f i x = u x
 
 end Gen
 
