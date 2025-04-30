@@ -27,11 +27,6 @@ namespace Gen
 variable {F : Type*} [Field F] [Fintype F] [DecidableEq F]
          {ι : Type*} [Fintype ι] [DecidableEq ι]
 
-/- Given coefficients r_0,...,r_{l-1} and functions f_0,...f_{l-1}: ι → 𝔽, compute
-   the linear combination f(x) = ∑_{i=0}^{l-1} r_i • f_i(x)   -/
-def linComb {ℓ : ℕ} (r : Fin ℓ → F) (f : Fin ℓ → ι → F) : ι → F :=
-  fun x => ∑ i, r i * f i x
-
 /- A generator `G`is a `proximity generator` if for every list of functions
    `f₁,…,f_ℓ : ι → F` and every admissible radius `δ` the following holds true:
 
@@ -40,19 +35,19 @@ def linComb {ℓ : ℕ} (r : Fin ℓ → F) (f : Fin ℓ → ι → F) : ι → 
    more frequently than the error bound `G.err δ`, then each function `fᵢ` coincides with
    some codeword on at least a `(1 - δ)` fraction of the evaluaton points. -/
 def isProximityGenerator
-    {ℓ : ℕ}
+    {l : ℕ}
     {C : LinearCode F ι}
-    (G : Generator C ℓ) : Prop :=
-      ∀ (f : Fin ℓ → ι → F) (δ : {δ : ℝ // 0 < δ ∧ δ < 1 - G.BStar}),
+    (G : Generator C l) : Prop :=
+      ∀ (f : Fin l → ι → F) (δ : {δ : ℝ // 0 < δ ∧ δ < 1 - G.BStar}),
       ((PMF.uniformOfFintype F).toOuterMeasure
         { r | fractionalHammingDistSet
-          (linComb (G.Smpl r) f)
+          (λ x ↦ ∑ j : Fin l, (G.Smpl r) j • (f j x))
           C.words
           C.toErrCorrCode.nonempty ≤ δ.val} ) >
         G.err δ →
-      ∃ S : Finset ι,
-        (S.card ≥ (1 - (δ : ℝ)) * (Fintype.card ι)) ∧
-        ∀ i : Fin ℓ, ∃ u ∈ C.words, ∀ x ∈ S, f i x = u x
+        ∃ S : Finset ι,
+          (S.card ≥ (1 - (δ : ℝ)) * (Fintype.card ι)) ∧
+          ∀ i : Fin l, ∃ u ∈ C.words, ∀ x ∈ S, f i x = u x
 
 end Gen
 
@@ -75,10 +70,10 @@ variable {ι : Type*} [Fintype ι]
     * `BStar = 0.1`;
     * `err δ = δ²`. -/
 noncomputable def ProximityGen.monomial
-    (C : LinearCode F ι) (l : ℕ) : ProximityGen C l where
+    (C : LinearCode F ι) (l : ℕ) : Generator C l where
   Smpl  := monomialSmpl l
   BStar := (1 : ℝ) / 10        -- 0.1
-  err   := fun δ => (δ.1) ^ 2  -- square the underlying real number
+  err   := fun δ => ((δ.1) ^ 2).toNNReal  -- square the underlying real number
 
 
 /-
