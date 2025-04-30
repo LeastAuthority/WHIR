@@ -1,0 +1,96 @@
+/-
+Copyright (c) 2025 ArkLib Contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Least Authority
+-/
+
+import WHIR.ErrCorrCodes
+
+import Mathlib.FieldTheory.Finite.Basic
+import Mathlib.Data.Finset.Basic
+import Mathlib.Data.Real.Basic
+import Mathlib.Probability.ProbabilityMassFunction.Basic
+import Mathlib.Probability.Distributions.Uniform
+
+structure Gen
+  {F : Type*} [Field F] [Fintype F] [DecidableEq F]
+  {ι : Type*} [Fintype ι]
+  (C : LinearCode F ι)
+  (l : ℕ) where
+    Smpl   : F → (Fin l → F)
+    BStar  : ℝ
+    err    : {δ : ℝ // 0 < δ ∧ δ < 1 - BStar} → ℝ
+
+
+namespace Gen
+
+variable {F : Type*} [Field F] [Fintype F] [DecidableEq F]
+         {ι : Type*} [Fintype ι] [DecidableEq ι]
+
+/- Given coefficients r_0,...,r_{l-1} and functions f_0,...f_{l-1}: ι → 𝔽, compute
+   the linear combination f(x) = ∑_{i=0}^{l-1} r_i • f_i(x)   -/
+def linComb {ℓ : ℕ} (r : Fin ℓ → F) (f : Fin ℓ → ι → F) : ι → F :=
+  fun x => ∑ i, r i * f i x
+
+/- WORK IN PROGRESS-/
+def isProximityGenerator
+    {ℓ : ℕ}
+    {C : LinearCode F ι}
+    (G : Gen C ℓ) : Prop :=
+      ∀ (f : Fin ℓ → ι → F) (δ : {δ : ℝ // 0 < δ ∧ δ < 1 - G.BStar}),
+      ((PMF.uniformOfFintype F).toOuterMeasure
+        { r | r = r} ) >
+        G.err δ → True
+
+end Gen
+
+
+-- EXAMPLE USAGE:
+
+/-- The generic *monomial sampler*
+    `x ↦ (1, x, x², … , x^(l-1))` realised as a function
+    `Fin l → F`. -/
+def monomialSmpl
+    {F : Type*} [Field F] (l : ℕ) (x : F) : Fin l → F :=
+  fun i => x ^ (i : ℕ)        -- `i` coerces to a natural number
+
+variable {F : Type*} [Field F] [Fintype F] [DecidableEq F]
+variable {ι : Type*} [Fintype ι]
+
+/-- **Proximity generator with monomial sampling**
+    * `l` is kept abstract;
+    * `Smpl` is `monomialSmpl l`;
+    * `BStar = 0.1`;
+    * `err δ = δ²`. -/
+noncomputable def ProximityGen.monomial
+    (C : LinearCode F ι) (l : ℕ) : ProximityGen C l where
+  Smpl  := monomialSmpl l
+  BStar := (1 : ℝ) / 10        -- 0.1
+  err   := fun δ => (δ.1) ^ 2  -- square the underlying real number
+
+
+/-
+\begin{definition}[Proximity generator]\label{def:proximity-generator}
+Let $\mathcal{C}\subseteq\mathbb{F}^{n}$ be a linear code.
+We say that $\operatorname{Gen}$ is a \emph{proximity generator} for $\mathcal{C}$
+with proximity bound $B$ and error $\operatorname{err}$ if the following implication
+holds for every tuple of functions $f_{1},\dots ,f_{\ell}:[n]\to\mathbb{F}$ and every
+$\delta\in (0,1-B(\mathcal{C},\ell))$.
+If
+\[
+  \Pr_{(r_{1},\dots ,r_{\ell})\;\gets\;\operatorname{Gen}(\ell)}
+  \!\Bigl[
+      \Delta\!\Bigl(\textstyle\sum_{i\in[\ell]} r_{i}\cdot f_{i},\; \mathcal{C}\Bigr)
+      \le \delta
+  \Bigr]
+  > \operatorname{err}(\mathcal{C},\ell,\delta),
+\]
+then there exists a set $S\subseteq[n]$ with $|S|\ge (1-\delta)\,n$ such that
+\[
+  \forall i\in[\ell]\; \exists\,u\in\mathcal{C}\;\text{ with }\;
+        \forall x\in S,\; f_{i}(x)=u(x).
+\]
+\end{definition}
+
+
+-/
